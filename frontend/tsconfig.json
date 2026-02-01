@@ -8,7 +8,8 @@
     "strict": true,
     "skipLibCheck": true,
     "noEmit": true,
-    "types": ["vitest/globals"]
+    "types": ["vitest/globals"],
+    "forceConsistentCasingInFileNames": true
   },
   "include": ["src"]
 }
