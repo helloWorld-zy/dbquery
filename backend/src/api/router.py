@@ -2,12 +2,13 @@ from __future__ import annotations
 
 from fastapi import APIRouter
 
-from . import connections, query
+from . import connections, metadata, query
 
 api_router = APIRouter()
 
 api_router.include_router(connections.router, prefix="/connections", tags=["connections"])
 api_router.include_router(query.router, prefix="/connections", tags=["query"])
+api_router.include_router(metadata.router, prefix="/connections", tags=["metadata"])
 
 # Future routers:
 # api_router.include_router(metadata.router, prefix="/connections", tags=["metadata"])

@@ -94,23 +94,23 @@ description: "Task list for DB Query Tool MVP"
 
 ### Tests for User Story 2 (TDD)
 
-- [ ] T037 [P] [US2] Contract test for metadata API in backend/tests/contract/test_metadata.py
-- [ ] T038 [P] [US2] Unit test for metadata normalization in backend/tests/unit/test_metadata_normalizer.py
-- [ ] T039 [P] [US2] Integration test for metadata refresh in backend/tests/integration/test_metadata_refresh.py
-- [ ] T040 [P] [US2] Frontend component test for metadata tree in frontend/tests/metadata-tree.test.tsx
+- [x] T037 [P] [US2] Contract test for metadata API in backend/tests/contract/test_metadata.py
+- [x] T038 [P] [US2] Unit test for metadata normalization in backend/tests/unit/test_metadata_normalizer.py
+- [x] T039 [P] [US2] Integration test for metadata refresh in backend/tests/integration/test_metadata_refresh.py
+- [x] T040 [P] [US2] Frontend component test for metadata tree in frontend/tests/metadata-tree.test.tsx
 
 ### Implementation for User Story 2
 
-- [ ] T041 [P] [US2] Implement metadata normalizer in backend/src/services/metadata_normalizer.py
-- [ ] T042 [P] [US2] Implement metadata service in backend/src/services/metadata_service.py
-- [ ] T043 [P] [US2] Add metadata repository operations in backend/src/repositories/metadata_repo.py
-- [ ] T044 [P] [US2] Implement metadata fetch in PostgreSQL adapter in backend/src/adapters/postgres_adapter.py
-- [ ] T045 [P] [US2] Implement metadata fetch in MariaDB adapter in backend/src/adapters/mariadb_adapter.py
-- [ ] T046 [US2] Add metadata APIs in backend/src/api/metadata.py
-- [ ] T047 [P] [US2] Implement metadata tree UI in frontend/src/components/metadata-tree.tsx
-- [ ] T048 [P] [US2] Implement relationship view UI in frontend/src/components/relationship-view.tsx
-- [ ] T049 [P] [US2] Implement metadata API client in frontend/src/services/metadata.ts
-- [ ] T050 [US2] Wire metadata panel into workspace page in frontend/src/pages/workspace.tsx
+- [x] T041 [P] [US2] Implement metadata normalizer in backend/src/services/metadata_normalizer.py
+- [x] T042 [P] [US2] Implement metadata service in backend/src/services/metadata_service.py
+- [x] T043 [P] [US2] Add metadata repository operations in backend/src/repositories/metadata_repo.py
+- [x] T044 [P] [US2] Implement metadata fetch in PostgreSQL adapter in backend/src/adapters/postgres_adapter.py
+- [x] T045 [P] [US2] Implement metadata fetch in MariaDB adapter in backend/src/adapters/mariadb_adapter.py
+- [x] T046 [US2] Add metadata APIs in backend/src/api/metadata.py
+- [x] T047 [P] [US2] Implement metadata tree UI in frontend/src/components/metadata-tree.tsx
+- [x] T048 [P] [US2] Implement relationship view UI in frontend/src/components/relationship-view.tsx
+- [x] T049 [P] [US2] Implement metadata API client in frontend/src/services/metadata.ts
+- [x] T050 [US2] Wire metadata panel into workspace page in frontend/src/pages/workspace.tsx
 
 **Checkpoint**: User Story 2 should be independently functional
 

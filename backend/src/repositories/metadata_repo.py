@@ -9,13 +9,14 @@ async def create_metadata_tables(connection: aiosqlite.Connection) -> None:
         CREATE TABLE IF NOT EXISTS metadata_snapshots (
             id TEXT PRIMARY KEY,
             connection_id TEXT NOT NULL,
-            captured_at TEXT NOT NULL,
+            refreshed_at TEXT NOT NULL,
             status TEXT NOT NULL,
             error_message TEXT,
             schema_count INTEGER NOT NULL DEFAULT 0,
             table_count INTEGER NOT NULL DEFAULT 0,
             view_count INTEGER NOT NULL DEFAULT 0,
-            relationship_count INTEGER NOT NULL DEFAULT 0
+            relationship_count INTEGER NOT NULL DEFAULT 0,
+            payload_json TEXT
         );
 
         CREATE TABLE IF NOT EXISTS schemas (
