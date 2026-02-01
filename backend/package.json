@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "@types/antd": "^1.0.4",
+    "antd": "^6.2.2",
+    "monaco-editor": "^0.55.1"
+  }
+}

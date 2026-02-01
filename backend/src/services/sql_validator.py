@@ -13,7 +13,6 @@ _DISALLOWED_NODES: Iterable[type[exp.Expression]] = (
     exp.Create,
     exp.Drop,
     exp.Alter,
-    exp.Truncate,
     exp.Command,
 )
 

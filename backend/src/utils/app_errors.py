@@ -9,3 +9,6 @@ class AppError(Exception):
     message: str
     status_code: int = 400
     details: dict[str, object] | None = None
+
+    def __str__(self) -> str:
+        return f"{self.code}: {self.message}"
