@@ -1,0 +1,525 @@
+openapi: 3.0.3
+info:
+  title: DB Query Tool API
+  version: 1.0.0
+servers:
+  - url: /api/v1
+paths:
+  /connections:
+    get:
+      summary: List connections
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ConnectionListResponse"
+    post:
+      summary: Create connection
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ConnectionCreate"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ConnectionResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /connections/{connectionId}:
+    delete:
+      summary: Delete connection
+      parameters:
+        - name: connectionId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Deleted
+  /connections/{connectionId}/test:
+    post:
+      summary: Test connection
+      parameters:
+        - name: connectionId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ConnectionTestResponse"
+        "400":
+          description: Connection failed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /connections/{connectionId}/metadata:
+    get:
+      summary: Get metadata snapshot
+      parameters:
+        - name: connectionId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MetadataResponse"
+  /connections/{connectionId}/metadata/refresh:
+    post:
+      summary: Refresh metadata snapshot
+      parameters:
+        - name: connectionId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "202":
+          description: Refresh started
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MetadataRefreshResponse"
+  /connections/{connectionId}/query:
+    post:
+      summary: Execute SQL query (SELECT-only)
+      parameters:
+        - name: connectionId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/QueryRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QueryResponse"
+        "400":
+          description: Invalid SQL
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "408":
+          description: Query timeout
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /connections/{connectionId}/query/cancel:
+    post:
+      summary: Cancel running query
+      parameters:
+        - name: connectionId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CancelQueryRequest"
+      responses:
+        "200":
+          description: Cancel result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CancelQueryResponse"
+  /connections/{connectionId}/generate-sql:
+    post:
+      summary: Generate SQL from natural language
+      parameters:
+        - name: connectionId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SqlGenerationRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SqlGenerationResponse"
+        "400":
+          description: Generation failed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /connections/{connectionId}/history:
+    get:
+      summary: Query history
+      parameters:
+        - name: connectionId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: page
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: pageSize
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 200
+            default: 20
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QueryHistoryResponse"
+  /exports:
+    post:
+      summary: Export query result
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ExportRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExportResponse"
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+            details:
+              type: object
+          required: [code, message, details]
+      required: [error]
+    ConnectionCreate:
+      type: object
+      properties:
+        name:
+          type: string
+        dbType:
+          type: string
+          enum: [postgres, mariadb]
+        connectionUrl:
+          type: string
+      required: [name, dbType, connectionUrl]
+    ConnectionResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        dbType:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        lastUsedAt:
+          type: string
+          format: date-time
+          nullable: true
+        lastTestStatus:
+          type: string
+          enum: [success, failed, unknown]
+      required: [id, name, dbType, createdAt, lastTestStatus]
+    ConnectionListResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/ConnectionResponse"
+        total:
+          type: integer
+        page:
+          type: integer
+        pageSize:
+          type: integer
+      required: [items, total, page, pageSize]
+    ConnectionTestResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [success, failed]
+        message:
+          type: string
+      required: [status]
+    MetadataResponse:
+      type: object
+      properties:
+        snapshotId:
+          type: string
+        status:
+          type: string
+          enum: [ready, refreshing, failed]
+        refreshedAt:
+          type: string
+          format: date-time
+        schemas:
+          type: array
+          items:
+            $ref: "#/components/schemas/Schema"
+        relationships:
+          type: array
+          items:
+            $ref: "#/components/schemas/Relationship"
+      required: [snapshotId, status, schemas, relationships]
+    MetadataRefreshResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [refreshing]
+        message:
+          type: string
+      required: [status]
+    Schema:
+      type: object
+      properties:
+        name:
+          type: string
+        tables:
+          type: array
+          items:
+            $ref: "#/components/schemas/Table"
+        views:
+          type: array
+          items:
+            $ref: "#/components/schemas/View"
+      required: [name]
+    Table:
+      type: object
+      properties:
+        name:
+          type: string
+        columns:
+          type: array
+          items:
+            $ref: "#/components/schemas/Column"
+        comment:
+          type: string
+          nullable: true
+      required: [name]
+    View:
+      type: object
+      properties:
+        name:
+          type: string
+        columns:
+          type: array
+          items:
+            $ref: "#/components/schemas/Column"
+        comment:
+          type: string
+          nullable: true
+      required: [name]
+    Column:
+      type: object
+      properties:
+        name:
+          type: string
+        dataType:
+          type: string
+        isNullable:
+          type: boolean
+        defaultValue:
+          type: string
+          nullable: true
+        comment:
+          type: string
+          nullable: true
+      required: [name, dataType, isNullable]
+    Relationship:
+      type: object
+      properties:
+        sourceTable:
+          type: string
+        sourceColumns:
+          type: array
+          items:
+            type: string
+        targetTable:
+          type: string
+        targetColumns:
+          type: array
+          items:
+            type: string
+      required: [sourceTable, sourceColumns, targetTable, targetColumns]
+    QueryRequest:
+      type: object
+      properties:
+        sqlText:
+          type: string
+        timeoutSeconds:
+          type: integer
+          default: 30
+        maxRows:
+          type: integer
+          default: 1000
+      required: [sqlText]
+    QueryResponse:
+      type: object
+      properties:
+        columns:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              type:
+                type: string
+            required: [name, type]
+        rows:
+          type: array
+          items:
+            type: array
+            items: {}
+        durationMs:
+          type: integer
+        limitApplied:
+          type: integer
+        requestId:
+          type: string
+      required: [columns, rows, durationMs, limitApplied, requestId]
+    CancelQueryRequest:
+      type: object
+      properties:
+        queryId:
+          type: string
+      required: [queryId]
+    CancelQueryResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [canceled, notSupported, notFound]
+        message:
+          type: string
+      required: [status]
+    SqlGenerationRequest:
+      type: object
+      properties:
+        prompt:
+          type: string
+        contextTables:
+          type: array
+          items:
+            type: string
+      required: [prompt]
+    SqlGenerationResponse:
+      type: object
+      properties:
+        sqlText:
+          type: string
+      required: [sqlText]
+    QueryHistoryResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              sqlText:
+                type: string
+              source:
+                type: string
+                enum: [manual, llm]
+              startedAt:
+                type: string
+                format: date-time
+              durationMs:
+                type: integer
+              rowCount:
+                type: integer
+              status:
+                type: string
+                enum: [success, failed, timeout, canceled]
+              errorMessage:
+                type: string
+                nullable: true
+            required: [id, sqlText, source, startedAt, durationMs, rowCount, status]
+        total:
+          type: integer
+        page:
+          type: integer
+        pageSize:
+          type: integer
+      required: [items, total, page, pageSize]
+    ExportRequest:
+      type: object
+      properties:
+        queryId:
+          type: string
+        format:
+          type: string
+          enum: [csv]
+      required: [queryId, format]
+    ExportResponse:
+      type: object
+      properties:
+        exportId:
+          type: string
+        downloadUrl:
+          type: string
+      required: [exportId, downloadUrl]
