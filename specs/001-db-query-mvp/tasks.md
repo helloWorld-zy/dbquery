@@ -35,17 +35,17 @@ description: "Task list for DB Query Tool MVP"
 
 **Purpose**: Core infrastructure that MUST be complete before ANY user story can be implemented
 
-- [ ] T007 Define base Pydantic models with camelCase aliasing in backend/src/models/base.py
-- [ ] T008 Define unified error response model in backend/src/models/errors.py
-- [ ] T009 [P] Implement request ID middleware in backend/src/utils/request_id.py
-- [ ] T010 [P] Implement structured logging setup in backend/src/utils/logging.py
-- [ ] T011 Implement CORS configuration allowing all origins in backend/src/api/app.py
-- [ ] T012 Define adapter interfaces and capability matrix in backend/src/adapters/base.py
-- [ ] T013 Implement SQLite repository base and connection in backend/src/repositories/sqlite.py
-- [ ] T014 Create metadata repository schema in backend/src/repositories/metadata_repo.py
-- [ ] T015 Create query history repository in backend/src/repositories/history_repo.py
-- [ ] T016 Create shared config loader in backend/src/utils/settings.py
-- [ ] T017 Add API router skeleton in backend/src/api/router.py
+- [x] T007 Define base Pydantic models with camelCase aliasing in backend/src/models/base.py
+- [x] T008 Define unified error response model in backend/src/models/errors.py
+- [x] T009 [P] Implement request ID middleware in backend/src/utils/request_id.py
+- [x] T010 [P] Implement structured logging setup in backend/src/utils/logging.py
+- [x] T011 Implement CORS configuration allowing all origins in backend/src/api/app.py
+- [x] T012 Define adapter interfaces and capability matrix in backend/src/adapters/base.py
+- [x] T013 Implement SQLite repository base and connection in backend/src/repositories/sqlite.py
+- [x] T014 Create metadata repository schema in backend/src/repositories/metadata_repo.py
+- [x] T015 Create query history repository in backend/src/repositories/history_repo.py
+- [x] T016 Create shared config loader in backend/src/utils/settings.py
+- [x] T017 Add API router skeleton in backend/src/api/router.py
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel
 
