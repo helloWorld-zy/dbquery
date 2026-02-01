@@ -59,28 +59,28 @@ description: "Task list for DB Query Tool MVP"
 
 ### Tests for User Story 1 (TDD)
 
-- [ ] T018 [P] [US1] Contract test for connections API in backend/tests/contract/test_connections.py
-- [ ] T019 [P] [US1] Contract test for query API in backend/tests/contract/test_query.py
-- [ ] T020 [P] [US1] Unit test for SQL validator (SELECT-only + limit) in backend/tests/unit/test_sql_validator.py
-- [ ] T021 [P] [US1] Integration test for query execution in backend/tests/integration/test_query_execution.py
-- [ ] T022 [P] [US1] Frontend component test for connection form in frontend/tests/connection-form.test.tsx
+- [x] T018 [P] [US1] Contract test for connections API in backend/tests/contract/test_connections.py
+- [x] T019 [P] [US1] Contract test for query API in backend/tests/contract/test_query.py
+- [x] T020 [P] [US1] Unit test for SQL validator (SELECT-only + limit) in backend/tests/unit/test_sql_validator.py
+- [x] T021 [P] [US1] Integration test for query execution in backend/tests/integration/test_query_execution.py
+- [x] T022 [P] [US1] Frontend component test for connection form in frontend/tests/connection-form.test.tsx
 
 ### Implementation for User Story 1
 
-- [ ] T023 [P] [US1] Implement SQL validator using sqlglot[rs] in backend/src/services/sql_validator.py
-- [ ] T024 [P] [US1] Add query execution service (timeout/maxRows) in backend/src/services/query_service.py
-- [ ] T025 [P] [US1] Implement PostgreSQL adapter in backend/src/adapters/postgres_adapter.py
-- [ ] T026 [P] [US1] Implement MariaDB adapter in backend/src/adapters/mariadb_adapter.py
-- [ ] T027 [P] [US1] Implement connection service in backend/src/services/connection_service.py
-- [ ] T028 [US1] Add connection APIs in backend/src/api/connections.py
-- [ ] T029 [US1] Add query API in backend/src/api/query.py
-- [ ] T030 [US1] Wire routes in backend/src/api/router.py
-- [ ] T031 [P] [US1] Create connection management page in frontend/src/pages/connections.tsx
-- [ ] T032 [P] [US1] Create query workspace page shell in frontend/src/pages/workspace.tsx
-- [ ] T033 [P] [US1] Implement API client for connections in frontend/src/services/connections.ts
-- [ ] T034 [P] [US1] Implement API client for query in frontend/src/services/query.ts
-- [ ] T035 [US1] Render query results table in frontend/src/components/query-results-table.tsx
-- [ ] T036 [US1] Add SQL editor with Monaco in frontend/src/components/sql-editor.tsx
+- [x] T023 [P] [US1] Implement SQL validator using sqlglot[rs] in backend/src/services/sql_validator.py
+- [x] T024 [P] [US1] Add query execution service (timeout/maxRows) in backend/src/services/query_service.py
+- [x] T025 [P] [US1] Implement PostgreSQL adapter in backend/src/adapters/postgres_adapter.py
+- [x] T026 [P] [US1] Implement MariaDB adapter in backend/src/adapters/mariadb_adapter.py
+- [x] T027 [P] [US1] Implement connection service in backend/src/services/connection_service.py
+- [x] T028 [US1] Add connection APIs in backend/src/api/connections.py
+- [x] T029 [US1] Add query API in backend/src/api/query.py
+- [x] T030 [US1] Wire routes in backend/src/api/router.py
+- [x] T031 [P] [US1] Create connection management page in frontend/src/pages/connections.tsx
+- [x] T032 [P] [US1] Create query workspace page shell in frontend/src/pages/workspace.tsx
+- [x] T033 [P] [US1] Implement API client for connections in frontend/src/services/connections.ts
+- [x] T034 [P] [US1] Implement API client for query in frontend/src/services/query.ts
+- [x] T035 [US1] Render query results table in frontend/src/components/query-results-table.tsx
+- [x] T036 [US1] Add SQL editor with Monaco in frontend/src/components/sql-editor.tsx
 
 **Checkpoint**: User Story 1 should be fully functional and testable independently
 
