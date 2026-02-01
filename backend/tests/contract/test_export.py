@@ -1,10 +1,10 @@
 from fastapi.testclient import TestClient
 
 from backend.src.api.app import create_app
-from backend.src.services.adapter_registry import get_registry
-from backend.src.services.export_service import get_export_service
-from backend.src.services.connection_service import get_connection_service
 from backend.src.adapters.base import AdapterCapabilities, DatabaseAdapter
+from backend.src.services.adapter_registry import get_registry
+from backend.src.services.connection_service import get_connection_service
+from backend.src.services.export_service import get_export_service
 
 
 class FakeAdapter(DatabaseAdapter):
@@ -31,7 +31,7 @@ class FakeAdapter(DatabaseAdapter):
         return False
 
 
-def test_query_roundtrip() -> None:
+def test_export_contract() -> None:
     registry = get_registry()
     registry.reset()
     registry.set_adapter("postgres", FakeAdapter())
@@ -47,4 +47,8 @@ def test_query_roundtrip() -> None:
         f"/api/v1/connections/{connection_id}/query",
         json={"sqlText": "select 1", "timeoutSeconds": 30, "maxRows": 1000},
     )
-    assert query_response.status_code == 200
+    query_id = query_response.json()["requestId"]
+
+    export_response = client.post("/api/v1/exports", json={"queryId": query_id, "format": "csv"})
+    assert export_response.status_code == 200
+    assert export_response.json()["exportId"]

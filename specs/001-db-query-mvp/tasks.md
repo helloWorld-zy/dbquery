@@ -124,24 +124,24 @@ description: "Task list for DB Query Tool MVP"
 
 ### Tests for User Story 3 (TDD)
 
-- [ ] T051 [P] [US3] Contract test for generate-sql API in backend/tests/contract/test_generate_sql.py
-- [ ] T052 [P] [US3] Contract test for export API in backend/tests/contract/test_export.py
-- [ ] T053 [P] [US3] Unit test for prompt builder in backend/tests/unit/test_prompt_builder.py
-- [ ] T054 [P] [US3] Frontend component test for NL2SQL panel in frontend/tests/nl2sql-panel.test.tsx
+- [x] T051 [P] [US3] Contract test for generate-sql API in backend/tests/contract/test_generate_sql.py
+- [x] T052 [P] [US3] Contract test for export API in backend/tests/contract/test_export.py
+- [x] T053 [P] [US3] Unit test for prompt builder in backend/tests/unit/test_prompt_builder.py
+- [x] T054 [P] [US3] Frontend component test for NL2SQL panel in frontend/tests/nl2sql-panel.test.tsx
 
 ### Implementation for User Story 3
 
-- [ ] T055 [P] [US3] Implement LLM prompt builder using metadata context in backend/src/services/prompt_builder.py
-- [ ] T056 [P] [US3] Implement Ollama client in backend/src/services/ollama_client.py
-- [ ] T057 [US3] Implement SQL generation service in backend/src/services/sql_generation_service.py
-- [ ] T058 [US3] Add generate-sql API in backend/src/api/generate_sql.py
-- [ ] T059 [P] [US3] Implement export service in backend/src/services/export_service.py
-- [ ] T060 [US3] Add export API in backend/src/api/exports.py
-- [ ] T061 [P] [US3] Implement NL2SQL panel UI in frontend/src/components/nl2sql-panel.tsx
-- [ ] T062 [P] [US3] Implement export controls in frontend/src/components/export-controls.tsx
-- [ ] T063 [P] [US3] Implement generate-sql API client in frontend/src/services/generate_sql.ts
-- [ ] T064 [P] [US3] Implement export API client in frontend/src/services/exports.ts
-- [ ] T065 [US3] Wire NL2SQL + export into workspace page in frontend/src/pages/workspace.tsx
+- [x] T055 [P] [US3] Implement LLM prompt builder using metadata context in backend/src/services/prompt_builder.py
+- [x] T056 [P] [US3] Implement Ollama client in backend/src/services/ollama_client.py
+- [x] T057 [US3] Implement SQL generation service in backend/src/services/sql_generation_service.py
+- [x] T058 [US3] Add generate-sql API in backend/src/api/generate_sql.py
+- [x] T059 [P] [US3] Implement export service in backend/src/services/export_service.py
+- [x] T060 [US3] Add export API in backend/src/api/exports.py
+- [x] T061 [P] [US3] Implement NL2SQL panel UI in frontend/src/components/nl2sql-panel.tsx
+- [x] T062 [P] [US3] Implement export controls in frontend/src/components/export-controls.tsx
+- [x] T063 [P] [US3] Implement generate-sql API client in frontend/src/services/generate_sql.ts
+- [x] T064 [P] [US3] Implement export API client in frontend/src/services/exports.ts
+- [x] T065 [US3] Wire NL2SQL + export into workspace page in frontend/src/pages/workspace.tsx
 
 **Checkpoint**: User Story 3 should be independently functional
 

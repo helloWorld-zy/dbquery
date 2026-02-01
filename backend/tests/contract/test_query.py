@@ -2,6 +2,7 @@ from fastapi.testclient import TestClient
 
 from backend.src.api.app import create_app
 from backend.src.services.adapter_registry import get_registry
+from backend.src.services.export_service import get_export_service
 from backend.src.services.connection_service import get_connection_service
 from backend.src.adapters.base import AdapterCapabilities, DatabaseAdapter
 
@@ -35,6 +36,7 @@ def test_query_executes() -> None:
     registry.reset()
     registry.set_adapter("postgres", FakeAdapter())
     get_connection_service().clear()
+    get_export_service().reset()
 
     client = TestClient(create_app())
     payload = {"name": "Local", "dbType": "postgres", "connectionUrl": "postgresql://db"}

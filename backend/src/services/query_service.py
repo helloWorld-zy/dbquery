@@ -8,13 +8,20 @@ from ..utils.app_errors import AppError
 from ..utils.settings import get_settings
 from .adapter_registry import AdapterRegistry
 from .connection_service import ConnectionService
+from .export_service import ExportService, get_export_service
 from .sql_validator import validate_select_only
 
 
 class QueryService:
-    def __init__(self, registry: AdapterRegistry, connection_service: ConnectionService) -> None:
+    def __init__(
+        self,
+        registry: AdapterRegistry,
+        connection_service: ConnectionService,
+        export_service: ExportService | None = None,
+    ) -> None:
         self._registry = registry
         self._connections = connection_service
+        self._exports = export_service or get_export_service()
 
     async def execute_query(self, connection_id: str, request: QueryRequest) -> QueryResponse:
         connection = self._connections.get_record(connection_id)
@@ -42,6 +49,7 @@ class QueryService:
         columns = [QueryColumn(name=col["name"], type=col["type"]) for col in result["columns"]]
         rows = result["rows"]
         request_id = str(uuid4())
+        self._exports.store_result(request_id, result["columns"], rows)
         return QueryResponse(
             columns=columns,
             rows=rows,

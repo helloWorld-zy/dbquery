@@ -8,6 +8,8 @@ import { listConnections } from "../services/connections";
 import { getMetadata, refreshMetadata } from "../services/metadata";
 import { executeQuery } from "../services/query";
 import MetadataTree from "../components/metadata-tree";
+import Nl2SqlPanel from "../components/nl2sql-panel";
+import ExportControls from "../components/export-controls";
 import RelationshipView from "../components/relationship-view";
 import QueryResultsTable from "../components/query-results-table";
 import SqlEditor from "../components/sql-editor";
@@ -103,11 +105,18 @@ export default function WorkspacePage() {
       </Card>
 
       <Card title="Results">
-        {results ? (
-          <QueryResultsTable columns={results.columns} rows={results.rows} />
-        ) : (
-          <div className="text-sm text-gray-500">No results yet.</div>
-        )}
+        <div className="space-y-3">
+          <ExportControls queryId={results?.requestId ?? null} />
+          {results ? (
+            <QueryResultsTable columns={results.columns} rows={results.rows} />
+          ) : (
+            <div className="text-sm text-gray-500">No results yet.</div>
+          )}
+        </div>
+      </Card>
+
+      <Card title="Natural Language to SQL">
+        <Nl2SqlPanel connectionId={selected} onGenerated={setSql} />
       </Card>
     </div>
   );
