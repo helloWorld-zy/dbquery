@@ -1,0 +1,49 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "db-query-backend"
+version = "0.1.0"
+description = "Backend for DB Query Tool MVP"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+  "fastapi",
+  "uvicorn[standard]",
+  "sqlalchemy",
+  "sqlglot[rs]",
+  "pydantic",
+  "python-dotenv",
+  "httpx",
+  "aiosqlite",
+  "asyncpg",
+  "aiomysql",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest",
+  "pytest-asyncio",
+  "mypy",
+  "ruff",
+  "types-python-dateutil",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+select = ["E", "F", "I", "B", "UP"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+warn_unused_ignores = true
+warn_return_any = true
+show_error_codes = true
+plugins = []
+
+[tool.pytest.ini_options]
+addopts = "-q"
+testpaths = ["tests"]
+asyncio_mode = "auto"

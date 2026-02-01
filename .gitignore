@@ -1,0 +1,25 @@
+# Node
+node_modules/
+dist/
+build/
+*.log
+.env*
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.egg-info/
+
+# Tests/coverage
+.coverage
+coverage/
+
+# Editors/OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
+*.tmp

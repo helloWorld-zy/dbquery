@@ -22,12 +22,12 @@ description: "Task list for DB Query Tool MVP"
 
 **Purpose**: Project initialization and basic structure
 
-- [ ] T001 Create backend project scaffolding in backend/ (app layout, package init)
-- [ ] T002 Create frontend project scaffolding in frontend/ (React + refine)
-- [ ] T003 [P] Configure backend tooling in backend/pyproject.toml (ruff, mypy, pytest)
-- [ ] T004 [P] Configure frontend tooling in frontend/package.json (eslint, prettier, vitest, playwright)
-- [ ] T005 [P] Add environment config templates in backend/.env.example and frontend/.env.example
-- [ ] T006 [P] Add root README quickstart references in README.md
+- [x] T001 Create backend project scaffolding in backend/ (app layout, package init)
+- [x] T002 Create frontend project scaffolding in frontend/ (React + refine)
+- [x] T003 [P] Configure backend tooling in backend/pyproject.toml (ruff, mypy, pytest)
+- [x] T004 [P] Configure frontend tooling in frontend/package.json (eslint, prettier, vitest, playwright)
+- [x] T005 [P] Add environment config templates in backend/.env.example and frontend/.env.example
+- [x] T006 [P] Add root README quickstart references in README.md
 
 ---
 
