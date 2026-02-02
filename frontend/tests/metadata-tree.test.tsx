@@ -16,5 +16,5 @@ test("renders metadata tree", () => {
     />
   );
   expect(screen.getByText("public")).toBeInTheDocument();
-  expect(screen.getByText("table: users")).toBeInTheDocument();
+  expect(screen.getByText("表: users")).toBeInTheDocument();
 });

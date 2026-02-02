@@ -1,6 +1,7 @@
 import { List } from "antd";
 
 import type { MetadataRelationship } from "../services/metadata";
+import zh from "../locales/zh";
 
 interface RelationshipViewProps {
   relationships: MetadataRelationship[];
@@ -8,7 +9,7 @@ interface RelationshipViewProps {
 
 export default function RelationshipView({ relationships }: RelationshipViewProps) {
   if (!relationships.length) {
-    return <div className="text-sm text-gray-500">No relationships found.</div>;
+    return <div className="text-sm text-gray-500">{zh.relationships.noRelationships}</div>;
   }
 
   return (

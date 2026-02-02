@@ -1,6 +1,7 @@
 import { Tree } from "antd";
 
 import type { MetadataSchema } from "../services/metadata";
+import zh from "../locales/zh";
 
 interface MetadataTreeProps {
   schemas: MetadataSchema[];
@@ -13,7 +14,7 @@ export default function MetadataTree({ schemas }: MetadataTreeProps) {
       key: schema.name,
       children: [
         ...schema.tables.map((table) => ({
-          title: `table: ${table.name}`,
+          title: `${zh.metadata.table}: ${table.name}`,
           key: `${schema.name}.table.${table.name}`,
           children: table.columns.map((col) => ({
             title: col.name,
@@ -21,7 +22,7 @@ export default function MetadataTree({ schemas }: MetadataTreeProps) {
           })),
         })),
         ...schema.views.map((view) => ({
-          title: `view: ${view.name}`,
+          title: `${zh.metadata.view}: ${view.name}`,
           key: `${schema.name}.view.${view.name}`,
           children: view.columns.map((col) => ({
             title: col.name,

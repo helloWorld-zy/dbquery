@@ -2,6 +2,7 @@ import { Button, Input, Space } from "antd";
 import { useState } from "react";
 
 import { generateSql } from "../services/generate_sql";
+import zh from "../locales/zh";
 
 interface Nl2SqlPanelProps {
   connectionId: string | null;
@@ -29,12 +30,12 @@ export default function Nl2SqlPanel({ connectionId, onGenerated }: Nl2SqlPanelPr
     <Space direction="vertical" className="w-full">
       <Input.TextArea
         rows={3}
-        placeholder="Ask in natural language..."
+        placeholder={zh.nl2sql.placeholder}
         value={prompt}
         onChange={(event) => setPrompt(event.target.value)}
       />
       <Button type="primary" onClick={handleGenerate} loading={loading} disabled={!prompt}>
-        Generate SQL
+        {zh.nl2sql.generate}
       </Button>
     </Space>
   );

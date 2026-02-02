@@ -29,6 +29,8 @@ class Settings:
     default_query_timeout_seconds: int
     default_max_rows: int
     max_max_rows: int
+    metadata_cache_ttl_seconds: int
+    metadata_cache_max_snapshots: int
     sqlite_path: Path
 
 
@@ -45,5 +47,7 @@ def get_settings() -> Settings:
         default_query_timeout_seconds=_get_int("DEFAULT_QUERY_TIMEOUT_SECONDS", 30),
         default_max_rows=_get_int("DEFAULT_MAX_ROWS", 1000),
         max_max_rows=_get_int("MAX_MAX_ROWS", 1000),
+        metadata_cache_ttl_seconds=_get_int("METADATA_CACHE_TTL_SECONDS", 300),
+        metadata_cache_max_snapshots=_get_int("METADATA_CACHE_MAX_SNAPSHOTS", 5),
         sqlite_path=sqlite_path,
     )

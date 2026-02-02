@@ -151,13 +151,13 @@ description: "Task list for DB Query Tool MVP"
 
 **Purpose**: Improvements that affect multiple user stories
 
-- [ ] T066 [P] Add API error mapping and UI error surfaces in frontend/src/components/error-banner.tsx
-- [ ] T067 [P] Add query history UI in frontend/src/components/query-history.tsx
-- [ ] T068 Add query history API endpoint in backend/src/api/history.py
-- [ ] T069 [P] Add query history service in backend/src/services/history_service.py
-- [ ] T070 [P] Add data export documentation in docs/export.md
-- [ ] T071 [P] Performance tuning for metadata caching in backend/src/services/metadata_service.py
-- [ ] T072 Run quickstart validation steps in specs/001-db-query-mvp/quickstart.md
+- [x] T066 [P] Add API error mapping and UI error surfaces in frontend/src/components/error-banner.tsx
+- [x] T067 [P] Add query history UI in frontend/src/components/query-history.tsx
+- [x] T068 Add query history API endpoint in backend/src/api/history.py
+- [x] T069 [P] Add query history service in backend/src/services/history_service.py
+- [x] T070 [P] Add data export documentation in docs/export.md
+- [x] T071 [P] Performance tuning for metadata caching in backend/src/services/metadata_service.py
+- [x] T072 Run quickstart validation steps in specs/001-db-query-mvp/quickstart.md
 
 ---
 

@@ -11,5 +11,5 @@ vi.mock("../src/services/generate_sql", () => ({
 test("renders NL2SQL panel", () => {
   const onGenerated = vi.fn();
   render(<Nl2SqlPanel connectionId="1" onGenerated={onGenerated} />);
-  expect(screen.getByPlaceholderText("Ask in natural language...")).toBeInTheDocument();
+  expect(screen.getByPlaceholderText("用自然语言描述您想查询的内容...")).toBeInTheDocument();
 });
