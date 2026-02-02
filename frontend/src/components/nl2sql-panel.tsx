@@ -1,4 +1,4 @@
-import { Button, Input, Space } from "antd";
+import { Button, Input, Space, message } from "antd";
 import { useState } from "react";
 
 import { generateSql } from "../services/generate_sql";
@@ -21,6 +21,9 @@ export default function Nl2SqlPanel({ connectionId, onGenerated }: Nl2SqlPanelPr
     try {
       const response = await generateSql(connectionId, { prompt });
       onGenerated(response.sqlText);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : zh.nl2sql.error;
+      message.error(errorMessage || zh.nl2sql.error);
     } finally {
       setLoading(false);
     }

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
-import { Badge, Button, Form, Input, Modal, Select, Space, Table, Tag, message } from "antd";
+import { Badge, Button, Form, Input, Modal, Select, Space, Table, Tag, message, Card, Typography } from "antd";
+import { PlusOutlined, DatabaseOutlined, EditOutlined, DeleteOutlined, CheckCircleOutlined, CloseCircleOutlined, QuestionCircleOutlined } from "@ant-design/icons";
 
 import type { ConnectionResponse } from "../services/connections";
 import {
@@ -9,6 +10,8 @@ import {
   testConnection,
   updateConnection,
 } from "../services/connections";
+
+const { Title, Text } = Typography;
 
 const dbOptions = [
   { label: "PostgreSQL", value: "postgres" },
@@ -105,100 +108,114 @@ export default function ConnectionsPage() {
 
   const statusMeta = useMemo(
     () => ({
-      success: { text: "通过", color: "green" },
-      failed: { text: "失败", color: "red" },
-      unknown: { text: "未测试", color: "default" },
+      success: { text: "通过", color: "success", icon: <CheckCircleOutlined /> },
+      failed: { text: "失败", color: "error", icon: <CloseCircleOutlined /> },
+      unknown: { text: "未测试", color: "default", icon: <QuestionCircleOutlined /> },
     }),
     []
   );
 
   const columns = [
-    { title: "名称", dataIndex: "name" },
+    { 
+      title: "名称", 
+      dataIndex: "name",
+      render: (text: string) => <span className="font-medium text-slate-800">{text}</span>
+    },
     {
       title: "数据库",
       dataIndex: "dbType",
-      render: (value: string) => (value === "postgres" ? "PostgreSQL" : "MariaDB"),
+      render: (value: string) => (
+        <Tag color="blue" className="rounded-md mr-0">
+          {value === "postgres" ? "PostgreSQL" : "MariaDB"}
+        </Tag>
+      ),
     },
     {
       title: "状态",
       dataIndex: "lastTestStatus",
       render: (value: ConnectionResponse["lastTestStatus"]) => {
         const meta = statusMeta[value] ?? statusMeta.unknown;
-        return <Tag color={meta.color}>{meta.text}</Tag>;
+        return <Tag icon={meta.icon} color={meta.color}>{meta.text}</Tag>;
       },
     },
     {
       title: "操作",
       render: (_: unknown, record: ConnectionResponse) => (
-        <Space>
-          <Button size="small" onClick={() => handleTest(record)}>
-            测试
-          </Button>
-          <Button size="small" onClick={() => openEdit(record)}>
-            编辑
-          </Button>
-          <Button size="small" danger onClick={() => handleDelete(record)}>
-            删除
-          </Button>
-        </Space>
+        <Space.Compact>
+          <Button type="text" size="small" icon={<CheckCircleOutlined />} onClick={() => handleTest(record)} title="测试连接" />
+          <Button type="text" size="small" icon={<EditOutlined />} onClick={() => openEdit(record)} title="编辑" />
+          <Button type="text" danger size="small" icon={<DeleteOutlined />} onClick={() => handleDelete(record)} title="删除" />
+        </Space.Compact>
       ),
     },
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-slate-50 to-cyan-50">
-      <div className="mx-auto max-w-6xl px-6 py-10">
-        <header className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+    <div className="py-2 animate-in fade-in duration-500">
+      <header className="mb-8">
+        <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
           <div>
-            <Badge className="mb-3" color="#0ea5e9" text="数据库连接" />
-            <h2 className="text-3xl font-semibold text-slate-900 font-['Newsreader']">
-              连接管理
-            </h2>
-            <p className="mt-2 max-w-2xl text-sm text-slate-600">
-              统一管理数据库连接，支持测试、编辑与删除操作。连接测试结果会实时刷新。
-            </p>
+            <Title level={2} className="!mb-1 !text-slate-800">连接管理</Title>
+            <Text type="secondary" className="text-slate-500">
+              配置数据库连接，支持 PostgreSQL 和 MariaDB。
+            </Text>
           </div>
-          <div className="rounded-2xl border border-white/70 bg-white/70 px-4 py-3 shadow-[0_20px_60px_-35px_rgba(15,23,42,0.4)] backdrop-blur">
-            <div className="text-xs uppercase tracking-[0.3em] text-slate-400">当前</div>
-            <div className="text-2xl font-semibold text-slate-900">
-              {connections.length}
-              <span className="ml-2 text-sm font-normal text-slate-500">连接</span>
-            </div>
+          <div className="hidden md:block">
+            <Card size="small" className="!bg-blue-50 !border-blue-100 shadow-sm">
+               <Space>
+                 <span className="text-slate-500 text-xs uppercase tracking-wider font-semibold">Total</span>
+                 <span className="text-xl font-bold text-blue-600 font-mono">{connections.length}</span>
+               </Space>
+            </Card>
           </div>
-        </header>
+        </div>
+      </header>
 
-        <div className="mt-8 grid gap-6 lg:grid-cols-[360px_1fr]">
-          <section className="rounded-3xl border border-white/70 bg-white/70 p-6 shadow-[0_30px_70px_-40px_rgba(15,23,42,0.45)] backdrop-blur">
-            <h3 className="text-lg font-semibold text-slate-900 font-['Newsreader']">新增连接</h3>
-            <Form form={form} layout="vertical" onFinish={handleCreate} className="mt-5 space-y-4">
-              <Form.Item label="名称" name="name" rules={[{ required: true, message: "请输入名称" }]}>
-                <Input placeholder="例如：生产库" />
+      <div className="grid gap-8 lg:grid-cols-[380px_1fr] items-start">
+        <div className="lg:sticky lg:top-24">
+          <Card 
+            title={<><PlusOutlined /> 新增连接</>} 
+            className="shadow-sm border-slate-200"
+            headStyle={{ borderBottom: '1px solid #f1f5f9' }}
+          >
+            <Form form={form} layout="vertical" onFinish={handleCreate} requiredMark={false} className="pt-2">
+              <Form.Item label="连接名称" name="name" rules={[{ required: true, message: "请输入名称" }]}>
+                <Input placeholder="例如：生产库" prefix={<DatabaseOutlined className="text-slate-400" />} />
               </Form.Item>
               <Form.Item label="数据库类型" name="dbType" rules={[{ required: true, message: "请选择数据库" }]}>
                 <Select options={dbOptions} placeholder="选择数据库类型" />
               </Form.Item>
               <Form.Item
-                label="连接地址"
+                label="连接地址 (URL)"
                 name="connectionUrl"
+                tooltip="例如: postgresql://user:pass@host:5432/db"
                 rules={[{ required: true, message: "请输入连接地址" }]}
               >
-                <Input placeholder="postgresql://user:pass@host:5432/db" />
+                <Input.TextArea autoSize={{ minRows: 2, maxRows: 6 }} placeholder="postgresql://..." className="font-mono text-xs" />
               </Form.Item>
-              <Form.Item>
-                <Button type="primary" htmlType="submit" loading={loading} className="w-full">
+              <Form.Item className="mb-0 mt-6">
+                <Button type="primary" htmlType="submit" loading={loading} block size="large" icon={<PlusOutlined />}>
                   创建连接
                 </Button>
               </Form.Item>
             </Form>
-          </section>
+          </Card>
+        </div>
 
-          <section className="rounded-3xl border border-white/70 bg-white/70 p-6 shadow-[0_30px_70px_-40px_rgba(15,23,42,0.45)] backdrop-blur">
-            <div className="flex items-center justify-between">
-              <h3 className="text-lg font-semibold text-slate-900 font-['Newsreader']">连接列表</h3>
-              <span className="text-xs text-slate-400">最近状态</span>
-            </div>
-            <Table className="mt-4" columns={columns} dataSource={connections} rowKey="id" />
-          </section>
+        <div className="min-w-0">
+          <Card 
+            title="连接列表" 
+            className="shadow-sm border-slate-200"
+            extra={<Button type="link" onClick={fetchConnections} size="small">刷新列表</Button>}
+          >
+            <Table 
+              columns={columns} 
+              dataSource={connections} 
+              rowKey="id" 
+              pagination={false}
+              rowClassName="hover:bg-slate-50 transition-colors"
+            />
+          </Card>
         </div>
       </div>
 
@@ -213,16 +230,17 @@ export default function ConnectionsPage() {
         }}
         onOk={() => editForm.submit()}
         destroyOnClose
+        centered
       >
-        <Form form={editForm} layout="vertical" onFinish={handleUpdate}>
+        <Form form={editForm} layout="vertical" onFinish={handleUpdate} className="pt-4">
           <Form.Item label="名称" name="name" rules={[{ required: true, message: "请输入名称" }]}>
             <Input />
           </Form.Item>
           <Form.Item label="数据库类型" name="dbType" rules={[{ required: true, message: "请选择数据库" }]}>
             <Select options={dbOptions} />
           </Form.Item>
-          <Form.Item label="连接地址" name="connectionUrl">
-            <Input placeholder="留空则保持不变" />
+          <Form.Item label="连接地址" name="connectionUrl" help="留空则保持不变">
+            <Input.TextArea autoSize={{ minRows: 2 }} placeholder="连接地址..." className="font-mono text-xs" />
           </Form.Item>
         </Form>
       </Modal>

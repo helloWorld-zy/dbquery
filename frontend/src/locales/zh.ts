@@ -74,6 +74,7 @@ const zh = {
   nl2sql: {
     placeholder: "用自然语言描述您想查询的内容...",
     generate: "生成 SQL",
+    error: "生成失败，请检查模型授权配置。",
   },
 
   // Export Controls

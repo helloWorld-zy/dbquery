@@ -2,7 +2,11 @@ from __future__ import annotations
 
 from openai import AsyncOpenAI
 
+from ..utils.logging import get_logger
 from ..utils.settings import get_settings
+
+
+_logger = get_logger(__name__)
 
 
 class ModelScopeClient:
@@ -16,6 +20,10 @@ class ModelScopeClient:
         base_url = (base_url or settings.modelscope_base_url).rstrip("/")
         api_key = api_key or settings.modelscope_api_key
         self._model_name = model_name or settings.modelscope_model_name
+        if not api_key:
+            _logger.warning(
+                "ModelScope API key is not set. Configure MODELSCOPE_API_KEY or MODELSCOPE_SDK_TOKEN."
+            )
         self._client = AsyncOpenAI(base_url=base_url, api_key=api_key)
 
     async def generate_sql(self, prompt: str) -> str:

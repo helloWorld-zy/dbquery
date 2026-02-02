@@ -56,7 +56,7 @@ class SqlGenerationService:
         except AuthenticationError as exc:
             raise AppError(
                 code="MODEL_AUTH_ERROR",
-                message="Model auth failed. Check MODELSCOPE_SDK_TOKEN.",
+                message="Model auth failed. Check MODELSCOPE_API_KEY or MODELSCOPE_SDK_TOKEN.",
                 status_code=502,
                 details={"error": str(exc)},
             ) from exc

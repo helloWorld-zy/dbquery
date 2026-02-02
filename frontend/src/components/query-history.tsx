@@ -1,5 +1,5 @@
-import { Button, Empty, List, Typography } from "antd";
-import { HistoryOutlined, RedoOutlined, DeleteOutlined } from "@ant-design/icons";
+import { Button, Empty, List, Typography, Space } from "antd";
+import { HistoryOutlined, RedoOutlined, DeleteOutlined, ClockCircleOutlined } from "@ant-design/icons";
 
 import zh from "../locales/zh";
 
@@ -19,48 +19,47 @@ interface QueryHistoryProps {
 export default function QueryHistory({ items, onRerun, onClear }: QueryHistoryProps) {
   if (!items.length) {
     return (
-      <Empty
-        image={<HistoryOutlined style={{ fontSize: 48, color: "#d9d9d9" }} />}
-        description={zh.history.empty}
-      />
+      <div className="h-full flex flex-col items-center justify-center p-8 text-slate-400">
+        <HistoryOutlined style={{ fontSize: 32, marginBottom: 8, opacity: 0.5 }} />
+        <div className="text-xs">{zh.history.empty}</div>
+      </div>
     );
   }
 
   return (
-    <div className="space-y-3">
-      <div className="flex items-center justify-between">
-        <Typography.Title level={5} className="!mb-0">
-          {zh.history.title}
-        </Typography.Title>
-        <Button size="small" icon={<DeleteOutlined />} onClick={onClear} danger>
+    <div className="flex flex-col h-full">
+      <div className="p-2 border-b border-slate-200 bg-white sticky top-0 z-10 text-right">
+        <Button size="small" type="text" danger icon={<DeleteOutlined />} onClick={onClear}>
           {zh.history.clearAll}
         </Button>
       </div>
       <List
+        className="flex-1"
+        itemLayout="vertical"
         dataSource={items}
         renderItem={(item) => (
-          <List.Item
-            key={item.id}
-            actions={[
-              <Button
-                key="rerun"
-                size="small"
-                icon={<RedoOutlined />}
-                onClick={() => onRerun(item)}
-              >
-                {zh.history.rerun}
-              </Button>,
-            ]}
-          >
-            <List.Item.Meta
-              title={
-                <Typography.Text code className="text-xs">
-                  {item.sqlText.length > 80 ? `${item.sqlText.slice(0, 80)}...` : item.sqlText}
-                </Typography.Text>
-              }
-              description={`${item.connectionName} · ${new Date(item.executedAt).toLocaleString("zh-CN")}`}
-            />
-          </List.Item>
+          <div className="p-3 border-b border-slate-100 bg-white hover:bg-slate-50 transition-colors group">
+            <div className="flex justify-between items-start gap-2 mb-1">
+               <div className="text-xs text-slate-400 flex items-center gap-1">
+                 <ClockCircleOutlined /> <span className="scale-90 origin-left">{new Date(item.executedAt).toLocaleTimeString("zh-CN")}</span>
+               </div>
+               <Button 
+                 size="small" 
+                 type="link" 
+                 className="!p-0 h-auto opacity-0 group-hover:opacity-100 transition-opacity" 
+                 icon={<RedoOutlined />} 
+                 onClick={() => onRerun(item)}
+               >
+                 {zh.history.rerun}
+               </Button>
+            </div>
+            <Typography.Text 
+               className="text-xs font-mono text-slate-700 block break-words leading-relaxed"
+               ellipsis={{ tooltip: item.sqlText, rows: 3 }}
+            >
+              {item.sqlText}
+            </Typography.Text>
+          </div>
         )}
       />
     </div>
