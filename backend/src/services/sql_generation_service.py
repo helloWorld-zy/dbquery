@@ -3,6 +3,13 @@ from __future__ import annotations
 import re
 
 import httpx
+from openai import (
+    APIConnectionError,
+    APIStatusError,
+    AuthenticationError,
+    OpenAIError,
+    RateLimitError,
+)
 
 from ..models.generate_sql import SqlGenerationRequest, SqlGenerationResponse
 from ..utils.app_errors import AppError
@@ -46,6 +53,53 @@ class SqlGenerationService:
         )
         try:
             raw_sql = await self._model_client.generate_sql(prompt)
+        except AuthenticationError as exc:
+            raise AppError(
+                code="MODEL_AUTH_ERROR",
+                message="Model auth failed. Check MODELSCOPE_SDK_TOKEN.",
+                status_code=502,
+                details={"error": str(exc)},
+            ) from exc
+        except RateLimitError as exc:
+            raise AppError(
+                code="MODEL_RATE_LIMIT",
+                message="Model service rate limited. Retry later.",
+                status_code=429,
+                details={"error": str(exc)},
+            ) from exc
+        except APIStatusError as exc:
+            if exc.status_code >= 500:
+                compact_prompt = build_prompt(
+                    request.prompt,
+                    metadata.schemas,
+                    metadata.relationships,
+                    request.context_tables,
+                    adapter.dialect,
+                    max_tables=50,
+                    max_relationships=20,
+                )
+                raw_sql = await self._model_client.generate_sql(compact_prompt)
+            else:
+                raise AppError(
+                    code="MODEL_SERVICE_UNAVAILABLE",
+                    message="Model service error. Check ModelScope status.",
+                    status_code=502,
+                    details={"error": str(exc)},
+                ) from exc
+        except APIConnectionError as exc:
+            raise AppError(
+                code="MODEL_SERVICE_UNAVAILABLE",
+                message="Model service connection error. Check ModelScope status.",
+                status_code=502,
+                details={"error": str(exc)},
+            ) from exc
+        except OpenAIError as exc:
+            raise AppError(
+                code="MODEL_SERVICE_UNAVAILABLE",
+                message="Model service error. Check ModelScope status.",
+                status_code=502,
+                details={"error": str(exc)},
+            ) from exc
         except httpx.HTTPStatusError as exc:
             if exc.response is not None and exc.response.status_code >= 500:
                 compact_prompt = build_prompt(

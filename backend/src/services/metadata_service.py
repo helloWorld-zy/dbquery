@@ -32,27 +32,35 @@ class MetadataService:
             if (now - cached_at).total_seconds() <= self._settings.metadata_cache_ttl_seconds:
                 return cached_response
 
-        async with get_sqlite_connection() as conn:
-            await create_metadata_tables(conn)
-            cursor = await conn.execute(
-                "SELECT id, status, refreshed_at, payload_json FROM metadata_snapshots WHERE connection_id = ? ORDER BY refreshed_at DESC LIMIT 1",
-                (connection_id,),
-            )
-            row = await cursor.fetchone()
-            if row:
-                payload = json.loads(row[3]) if row[3] else {"schemas": [], "relationships": []}
-                refreshed_at = datetime.fromisoformat(row[2])
-                if refreshed_at.tzinfo is None:
-                    refreshed_at = refreshed_at.replace(tzinfo=timezone.utc)
-                response = MetadataResponse(
-                    snapshot_id=row[0],
-                    status=row[1],
-                    refreshed_at=refreshed_at,
-                    schemas=payload.get("schemas", []),
-                    relationships=payload.get("relationships", []),
+        try:
+            async with get_sqlite_connection() as conn:
+                await create_metadata_tables(conn)
+                cursor = await conn.execute(
+                    "SELECT id, status, refreshed_at, payload_json FROM metadata_snapshots WHERE connection_id = ? ORDER BY refreshed_at DESC LIMIT 1",
+                    (connection_id,),
                 )
-                _memory_cache[connection_id] = (response, now)
-                return response
+                row = await cursor.fetchone()
+                if row:
+                    payload = json.loads(row[3]) if row[3] else {"schemas": [], "relationships": []}
+                    refreshed_at = datetime.fromisoformat(row[2])
+                    if refreshed_at.tzinfo is None:
+                        refreshed_at = refreshed_at.replace(tzinfo=timezone.utc)
+                    response = MetadataResponse(
+                        snapshot_id=row[0],
+                        status=row[1],
+                        refreshed_at=refreshed_at,
+                        schemas=payload.get("schemas", []),
+                        relationships=payload.get("relationships", []),
+                    )
+                    _memory_cache[connection_id] = (response, now)
+                    return response
+        except Exception as exc:
+            raise AppError(
+                code="METADATA_CACHE_ERROR",
+                message="Failed to read metadata cache.",
+                status_code=500,
+                details={"error": str(exc)},
+            ) from exc
 
         return await self.refresh_snapshot(connection_id)
 
@@ -62,25 +70,41 @@ class MetadataService:
         if adapter is None:
             raise AppError(code="ADAPTER_NOT_FOUND", message="No adapter for db type.")
 
-        raw = await adapter.fetch_metadata(record.connection_url)
+        try:
+            raw = await adapter.fetch_metadata(record.connection_url)
+        except Exception as exc:
+            raise AppError(
+                code="METADATA_FETCH_FAILED",
+                message="Failed to fetch metadata from database.",
+                status_code=500,
+                details={"error": str(exc)},
+            ) from exc
         normalized = normalize_metadata(raw)
         now = datetime.now(timezone.utc)
         snapshot_id = str(uuid4())
 
-        async with get_sqlite_connection() as conn:
-            await create_metadata_tables(conn)
-            await conn.execute(
-                "INSERT INTO metadata_snapshots (id, connection_id, refreshed_at, status, payload_json) VALUES (?, ?, ?, ?, ?)",
-                (
-                    snapshot_id,
-                    connection_id,
-                    now.isoformat(),
-                    "ready",
-                    json.dumps(normalized),
-                ),
-            )
-            await self._trim_snapshots(conn, connection_id)
-            await conn.commit()
+        try:
+            async with get_sqlite_connection() as conn:
+                await create_metadata_tables(conn)
+                await conn.execute(
+                    "INSERT INTO metadata_snapshots (id, connection_id, refreshed_at, status, payload_json) VALUES (?, ?, ?, ?, ?)",
+                    (
+                        snapshot_id,
+                        connection_id,
+                        now.isoformat(),
+                        "ready",
+                        json.dumps(normalized),
+                    ),
+                )
+                await self._trim_snapshots(conn, connection_id)
+                await conn.commit()
+        except Exception as exc:
+            raise AppError(
+                code="METADATA_CACHE_ERROR",
+                message="Failed to write metadata cache.",
+                status_code=500,
+                details={"error": str(exc)},
+            ) from exc
 
         response = MetadataResponse(
             snapshot_id=snapshot_id,

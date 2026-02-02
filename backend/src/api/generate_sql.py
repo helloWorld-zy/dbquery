@@ -27,3 +27,10 @@ async def generate_sql(
         return await _service.generate_sql(connection_id, request)
     except AppError as exc:
         return error_response(exc.status_code, exc.code, exc.message, exc.details)
+    except Exception as exc:
+        return error_response(
+            500,
+            "INTERNAL_ERROR",
+            "Unexpected server error.",
+            {"error": str(exc)},
+        )
