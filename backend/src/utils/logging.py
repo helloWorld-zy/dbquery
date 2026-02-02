@@ -12,6 +12,15 @@ class RequestIdFilter(logging.Filter):
 
 
 def configure_logging() -> None:
+    old_factory = logging.getLogRecordFactory()
+
+    def record_factory(*args, **kwargs) -> logging.LogRecord:
+        record = old_factory(*args, **kwargs)
+        if not hasattr(record, "request_id"):
+            record.request_id = get_request_id() or "-"
+        return record
+
+    logging.setLogRecordFactory(record_factory)
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s %(levelname)s [%(request_id)s] %(name)s: %(message)s",

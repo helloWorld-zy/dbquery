@@ -17,6 +17,12 @@ class ConnectionCreate(AppBaseModel):
     connection_url: str = Field(..., min_length=1)
 
 
+class ConnectionUpdate(AppBaseModel):
+    name: str | None = Field(default=None, min_length=1, max_length=100)
+    db_type: DbType | None = None
+    connection_url: str | None = Field(default=None, min_length=1)
+
+
 class ConnectionResponse(AppBaseModel):
     id: str
     name: str

@@ -37,6 +37,27 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
   /connections/{connectionId}:
+    put:
+      summary: Update connection
+      parameters:
+        - name: connectionId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ConnectionUpdate"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ConnectionResponse"
     delete:
       summary: Delete connection
       parameters:
@@ -278,6 +299,16 @@ components:
           type: string
           enum: [success, failed, unknown]
       required: [id, name, dbType, createdAt, lastTestStatus]
+    ConnectionUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+        dbType:
+          type: string
+          enum: [postgres, mariadb]
+        connectionUrl:
+          type: string
     ConnectionListResponse:
       type: object
       properties:

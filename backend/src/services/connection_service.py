@@ -5,7 +5,12 @@ from datetime import datetime, timezone
 from typing import Dict
 from uuid import uuid4
 
-from ..models.connections import ConnectionCreate, ConnectionResponse, ConnectionTestResponse
+from ..models.connections import (
+    ConnectionCreate,
+    ConnectionResponse,
+    ConnectionTestResponse,
+    ConnectionUpdate,
+)
 from ..utils.app_errors import AppError
 from .adapter_registry import AdapterRegistry, get_registry
 
@@ -65,6 +70,28 @@ class ConnectionService:
         if connection_id not in self._records:
             raise AppError(code="NOT_FOUND", message="Connection not found.", status_code=404)
         del self._records[connection_id]
+
+    def update_connection(self, connection_id: str, data: ConnectionUpdate) -> ConnectionResponse:
+        record = self.get_record(connection_id)
+        if data.name is not None and data.name != record.name:
+            for other in self._records.values():
+                if other.id != connection_id and other.name == data.name:
+                    raise AppError(code="CONNECTION_NAME_EXISTS", message="Connection name exists.")
+            record.name = data.name
+
+        reset_status = False
+        if data.db_type is not None and data.db_type != record.db_type:
+            record.db_type = data.db_type
+            reset_status = True
+        if data.connection_url is not None and data.connection_url != record.connection_url:
+            record.connection_url = data.connection_url
+            reset_status = True
+
+        if reset_status:
+            record.last_test_status = "unknown"
+            record.last_test_error = None
+
+        return record.to_response()
 
     def get_record(self, connection_id: str) -> ConnectionRecord:
         record = self._records.get(connection_id)

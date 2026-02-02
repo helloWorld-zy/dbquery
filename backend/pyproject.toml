@@ -15,6 +15,7 @@ dependencies = [
   "sqlglot[rs]",
   "pydantic",
   "python-dotenv",
+  "openai",
   "httpx",
   "aiosqlite",
   "asyncpg",

@@ -111,7 +111,7 @@
 
 - **NFR-001**: 后端 MUST 使用 SQL 解析器对所有 SQL 进行语法检查并限制为单条 SELECT。
 - **NFR-002**: 后端 MUST 通过 CORS 允许所有 origin 访问 API。
-- **NFR-003**: 自然语言生成 SQL MUST 使用本地 Ollama 模型提供服务。
+- **NFR-003**: 自然语言生成 SQL MUST 使用 ModelScope 推理服务提供支持。
 - **NFR-004**: 前端 MUST 使用 Monaco Editor 作为 SQL 编辑器。
 - **NFR-005**: 前端 MUST 使用 React + refine + Ant Design + Tailwind 作为 UI 技术栈。
 

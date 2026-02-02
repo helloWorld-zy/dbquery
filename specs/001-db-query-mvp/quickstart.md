@@ -7,12 +7,13 @@
 - Python 3.12+（后端）
 - Node.js 22+（前端）
 - PostgreSQL 或 MariaDB 实例
-- Ollama 已安装并可访问（本地模型服务）
+- ModelScope 推理服务已配置（用于 NL2SQL）
 
 ## Environment Variables
-后端需要以下环境变量（示例）：
-- OLLAMA_BASE_URL
-- OLLAMA_MODEL_NAME
+在项目根目录创建 .env，后端需要以下环境变量（示例）：
+- MODELSCOPE_BASE_URL
+- MODELSCOPE_SDK_TOKEN
+- MODELSCOPE_MODEL_NAME
 - DEFAULT_QUERY_TIMEOUT_SECONDS
 - DEFAULT_MAX_ROWS
 - MAX_MAX_ROWS

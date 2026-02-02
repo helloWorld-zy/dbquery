@@ -7,7 +7,7 @@ from backend.src.services.adapter_registry import get_registry
 from backend.src.services.connection_service import get_connection_service
 from backend.src.services.metadata_service import MetadataService
 from backend.src.services.sql_generation_service import SqlGenerationService
-from backend.src.services.ollama_client import OllamaClient
+from backend.src.services.modelscope_client import ModelScopeClient
 from backend.src.services.prompt_builder import build_prompt
 
 
@@ -42,7 +42,7 @@ class FakeAdapter(DatabaseAdapter):
         return False
 
 
-class FakeOllama(OllamaClient):
+class FakeModelScope(ModelScopeClient):
     async def generate_sql(self, prompt: str) -> str:
         assert "Only SELECT" in prompt
         return "select * from users"
@@ -60,7 +60,9 @@ def test_generate_sql_contract(monkeypatch: pytest.MonkeyPatch) -> None:
     connection_id = response.json()["id"]
 
     metadata_service = MetadataService(registry, get_connection_service())
-    service = SqlGenerationService(registry, get_connection_service(), metadata_service, FakeOllama())
+    service = SqlGenerationService(
+        registry, get_connection_service(), metadata_service, FakeModelScope()
+    )
 
     monkeypatch.setattr(
         "backend.src.api.generate_sql._service",

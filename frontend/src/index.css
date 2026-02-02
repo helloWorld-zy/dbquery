@@ -1,7 +1,24 @@
+@import url("https://fonts.googleapis.com/css2?family=Newsreader:wght@400;600&family=Space+Grotesk:wght@400;500;600;700&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
   color-scheme: light;
+  --ink: #0f172a;
+  --muted: #475569;
+  --card: rgba(255, 255, 255, 0.72);
+}
+
+body {
+  font-family: "Space Grotesk", "Segoe UI", sans-serif;
+  color: var(--ink);
+  background-color: #f8fafc;
+}
+
+h1,
+h2,
+h3 {
+  font-family: "Newsreader", "Space Grotesk", serif;
 }

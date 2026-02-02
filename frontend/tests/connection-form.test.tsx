@@ -9,12 +9,13 @@ vi.mock("../src/services/connections", async () => {
     createConnection: vi.fn(),
     deleteConnection: vi.fn(),
     testConnection: vi.fn(),
+    updateConnection: vi.fn(),
   };
 });
 
 test("renders connection form", async () => {
   render(<ConnectionsPage />);
-  expect(screen.getByText("Connections")).toBeInTheDocument();
-  expect(await screen.findByLabelText("Name")).toBeInTheDocument();
-  expect(screen.getByLabelText("Database")).toBeInTheDocument();
+  expect(screen.getByText("连接管理")).toBeInTheDocument();
+  expect(await screen.findByLabelText("名称")).toBeInTheDocument();
+  expect(screen.getByLabelText("数据库类型")).toBeInTheDocument();
 });

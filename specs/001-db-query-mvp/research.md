@@ -14,9 +14,9 @@
 - **Alternatives considered**: sqlparse（不够严格）、直接 regex 检测（不安全）。
 
 ## Decision 3: LLM 提供方式
-- **Decision**: 使用 Ollama 本地模型服务生成 SQL。
-- **Rationale**: 满足本地部署与隐私需求；避免外部 API 依赖。
-- **Alternatives considered**: OpenAI API（外部依赖与成本）。
+- **Decision**: 使用 ModelScope 推理服务生成 SQL。
+- **Rationale**: 提供托管模型能力与稳定的 OpenAI 兼容接口；便于统一接入。
+- **Alternatives considered**: 本地 Ollama（需要本地模型与运维）。
 
 ## Decision 4: 数据库适配器架构
 - **Decision**: 采用“适配器接口 + 能力矩阵”的多数据库架构，MVP 支持 PostgreSQL 与 MariaDB。

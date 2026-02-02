@@ -7,7 +7,8 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-load_dotenv()
+_root_dir = Path(__file__).resolve().parents[3]
+load_dotenv(dotenv_path=_root_dir / ".env")
 
 
 def _get_int(name: str, default: int) -> int:
@@ -22,8 +23,9 @@ def _get_int(name: str, default: int) -> int:
 
 @dataclass(frozen=True)
 class Settings:
-    ollama_base_url: str
-    ollama_model_name: str
+    modelscope_base_url: str
+    modelscope_api_key: str
+    modelscope_model_name: str
     default_query_timeout_seconds: int
     default_max_rows: int
     max_max_rows: int
@@ -33,9 +35,13 @@ class Settings:
 @lru_cache
 def get_settings() -> Settings:
     sqlite_path = Path("./db_query/db_query.db")
+    api_key = os.getenv("MODELSCOPE_API_KEY") or os.getenv("MODELSCOPE_SDK_TOKEN", "")
     return Settings(
-        ollama_base_url=os.getenv("OLLAMA_BASE_URL", "http://localhost:11434"),
-        ollama_model_name=os.getenv("OLLAMA_MODEL_NAME", "deepseek-v3.2:cloud"),
+        modelscope_base_url=os.getenv(
+            "MODELSCOPE_BASE_URL", "https://api-inference.modelscope.cn/v1"
+        ),
+        modelscope_api_key=api_key,
+        modelscope_model_name=os.getenv("MODELSCOPE_MODEL_NAME", "moonshotai/Kimi-K2.5"),
         default_query_timeout_seconds=_get_int("DEFAULT_QUERY_TIMEOUT_SECONDS", 30),
         default_max_rows=_get_int("DEFAULT_MAX_ROWS", 1000),
         max_max_rows=_get_int("MAX_MAX_ROWS", 1000),

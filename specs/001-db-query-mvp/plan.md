@@ -7,7 +7,7 @@
 
 ## Summary
 
-交付一个支持 PostgreSQL 与 MariaDB 的数据库查询 Web 应用：连接管理、元数据浏览（含关系）、仅 SELECT 的 SQL 查询、自然语言生成 SQL、结果表格展示与导出；整体采用后端 FastAPI + sqlglot[rs] + Ollama 与前端 React/refine/Ant Design/Tailwind/Monaco，数据元缓存存于本地 SQLite，并通过统一适配器架构为后续多数据库扩展做准备。
+交付一个支持 PostgreSQL 与 MariaDB 的数据库查询 Web 应用：连接管理、元数据浏览（含关系）、仅 SELECT 的 SQL 查询、自然语言生成 SQL、结果表格展示与导出；整体采用后端 FastAPI + sqlglot[rs] + ModelScope 与前端 React/refine/Ant Design/Tailwind/Monaco，数据元缓存存于本地 SQLite，并通过统一适配器架构为后续多数据库扩展做准备。
 
 ## Technical Context
 
@@ -18,7 +18,7 @@
 -->
 
 **Language/Version**: Python 3.12+（后端，使用实现时的最新稳定版）, Node.js 22+（前端工具链）  
-**Primary Dependencies**: FastAPI, SQLAlchemy, sqlglot[rs], Ollama, React 18+, refine, Ant Design, Tailwind, Monaco Editor  
+**Primary Dependencies**: FastAPI, SQLAlchemy, sqlglot[rs], ModelScope, React 18+, refine, Ant Design, Tailwind, Monaco Editor  
 **Storage**: PostgreSQL 与 MariaDB（业务数据源），SQLite（元数据/历史缓存：./db_query/db_query.db）  
 **Testing**: pytest（后端 TDD），Vitest + Playwright（前端）  
 **Target Platform**: 本地或自托管 Web 应用（Windows/Mac/Linux）  

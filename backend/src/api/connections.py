@@ -2,7 +2,12 @@ from __future__ import annotations
 
 from fastapi import APIRouter
 
-from ..models.connections import ConnectionCreate, ConnectionListResponse, ConnectionResponse
+from ..models.connections import (
+    ConnectionCreate,
+    ConnectionListResponse,
+    ConnectionResponse,
+    ConnectionUpdate,
+)
 from ..models.connections import ConnectionTestResponse
 from ..services.adapter_registry import get_registry
 from ..services.connection_service import get_connection_service
@@ -33,6 +38,14 @@ def create_connection(request: ConnectionCreate) -> ConnectionResponse:
 def delete_connection(connection_id: str) -> None:
     try:
         _service.delete_connection(connection_id)
+    except AppError as exc:
+        return error_response(exc.status_code, exc.code, exc.message, exc.details)
+
+
+@router.put("/{connection_id}", response_model=ConnectionResponse)
+def update_connection(connection_id: str, request: ConnectionUpdate) -> ConnectionResponse:
+    try:
+        return _service.update_connection(connection_id, request)
     except AppError as exc:
         return error_response(exc.status_code, exc.code, exc.message, exc.details)
 

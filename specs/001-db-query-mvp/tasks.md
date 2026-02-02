@@ -132,7 +132,7 @@ description: "Task list for DB Query Tool MVP"
 ### Implementation for User Story 3
 
 - [x] T055 [P] [US3] Implement LLM prompt builder using metadata context in backend/src/services/prompt_builder.py
-- [x] T056 [P] [US3] Implement Ollama client in backend/src/services/ollama_client.py
+- [x] T056 [P] [US3] Implement ModelScope client in backend/src/services/modelscope_client.py
 - [x] T057 [US3] Implement SQL generation service in backend/src/services/sql_generation_service.py
 - [x] T058 [US3] Add generate-sql API in backend/src/api/generate_sql.py
 - [x] T059 [P] [US3] Implement export service in backend/src/services/export_service.py

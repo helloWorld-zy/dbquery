@@ -6,6 +6,12 @@ export interface ConnectionCreate {
   connectionUrl: string;
 }
 
+export interface ConnectionUpdate {
+  name?: string;
+  dbType?: "postgres" | "mariadb";
+  connectionUrl?: string;
+}
+
 export interface ConnectionResponse {
   id: string;
   name: string;
@@ -40,6 +46,16 @@ export function createConnection(payload: ConnectionCreate): Promise<ConnectionR
 
 export function deleteConnection(connectionId: string): Promise<void> {
   return apiFetch(`/connections/${connectionId}`, { method: "DELETE" });
+}
+
+export function updateConnection(
+  connectionId: string,
+  payload: ConnectionUpdate
+): Promise<ConnectionResponse> {
+  return apiFetch(`/connections/${connectionId}`, {
+    method: "PUT",
+    body: JSON.stringify(payload),
+  });
 }
 
 export function testConnection(connectionId: string): Promise<ConnectionTestResponse> {
