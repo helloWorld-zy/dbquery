@@ -2,7 +2,7 @@ import { apiFetch } from "./api";
 
 export interface ExportRequest {
   queryId: string;
-  format: "csv";
+  format: "csv" | "json";
 }
 
 export interface ExportResponse {

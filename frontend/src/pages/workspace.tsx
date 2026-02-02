@@ -19,6 +19,8 @@ import type { HistoryItem } from "../components/query-history";
 import { listConnections } from "../services/connections";
 import { getMetadata, refreshMetadata } from "../services/metadata";
 import { executeQuery } from "../services/query";
+import type { ExportRequest } from "../services/exports";
+import { exportQuery } from "../services/exports";
 import { addHistory, clearHistory, listHistory } from "../services/history";
 import MetadataTree from "../components/metadata-tree";
 import Nl2SqlPanel from "../components/nl2sql-panel";
@@ -44,6 +46,7 @@ export default function WorkspacePage() {
   const [error, setError] = useState<string | null>(null);
   const [history, setHistory] = useState<HistoryItem[]>([]);
   const [activeResultTab, setActiveResultTab] = useState("results");
+  const [exportFormat, setExportFormat] = useState<ExportRequest["format"]>("csv");
 
   const loadConnections = async () => {
     const response = await listConnections();
@@ -71,7 +74,20 @@ export default function WorkspacePage() {
     void loadHistory();
   }, [selected]);
 
-  const handleExecute = async () => {
+  const exportByQueryId = async (queryId: string | null) => {
+    if (!queryId) {
+      message.warning(zh.export.noResults);
+      return;
+    }
+    try {
+      const response = await exportQuery({ queryId, format: exportFormat });
+      message.success(`${zh.export.ready}: ${response.downloadUrl}`);
+    } catch (err) {
+      message.error((err as Error).message);
+    }
+  };
+
+  const runQuery = async (afterSuccess?: (response: QueryResponse) => Promise<void> | void) => {
     if (!selected) {
       message.warning(zh.workspace.selectConnectionFirst);
       return;
@@ -92,6 +108,9 @@ export default function WorkspacePage() {
         });
         await loadHistory();
       }
+      if (afterSuccess) {
+        await afterSuccess(response);
+      }
     } catch (err) {
       const errorMsg = (err as Error).message;
       setError(errorMsg);
@@ -99,6 +118,16 @@ export default function WorkspacePage() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleExecute = async () => {
+    await runQuery();
+  };
+
+  const handleExecuteAndExport = async () => {
+    await runQuery(async (response) => {
+      await exportByQueryId(response.requestId);
+    });
   };
 
   const handleRefreshMetadata = async () => {
@@ -173,6 +202,14 @@ export default function WorkspacePage() {
             >
             {zh.workspace.runQuery}
             </Button>
+          <Button
+            size="large"
+            icon={<ThunderboltOutlined />}
+            onClick={handleExecuteAndExport}
+            loading={loading}
+          >
+            {zh.workspace.runQueryExport}
+          </Button>
         </div>
       </div>
 
@@ -271,7 +308,12 @@ export default function WorkspacePage() {
                             children: (
                                 <div className="h-full flex flex-col">
                                     <div className="p-2 border-b border-slate-100 flex justify-end">
-                                        <ExportControls queryId={results?.requestId ?? null} />
+                                      <ExportControls
+                                        queryId={results?.requestId ?? null}
+                                        format={exportFormat}
+                                        onFormatChange={setExportFormat}
+                                        onExport={() => exportByQueryId(results?.requestId ?? null)}
+                                      />
                                     </div>
                                     <div className="flex-1 overflow-auto p-4">
                                         {results ? (

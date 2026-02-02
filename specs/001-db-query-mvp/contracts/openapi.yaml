@@ -544,7 +544,7 @@ components:
           type: string
         format:
           type: string
-          enum: [csv]
+          enum: [csv, json]
       required: [queryId, format]
     ExportResponse:
       type: object

@@ -53,12 +53,12 @@ export default function QueryHistory({ items, onRerun, onClear }: QueryHistoryPr
                  {zh.history.rerun}
                </Button>
             </div>
-            <Typography.Text 
+            <Typography.Paragraph
                className="text-xs font-mono text-slate-700 block break-words leading-relaxed"
                ellipsis={{ tooltip: item.sqlText, rows: 3 }}
             >
               {item.sqlText}
-            </Typography.Text>
+            </Typography.Paragraph>
           </div>
         )}
       />

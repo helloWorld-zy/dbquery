@@ -62,6 +62,7 @@ const zh = {
     selectConnection: "选择连接",
     selectConnectionFirst: "请先选择连接",
     runQuery: "执行查询",
+    runQueryExport: "查询并导出",
     sqlEditor: "SQL 编辑器",
     metadata: "元数据",
     refresh: "刷新",
@@ -80,6 +81,8 @@ const zh = {
   // Export Controls
   export: {
     csv: "导出 CSV",
+    json: "导出 JSON",
+    export: "导出",
     noResults: "暂无可导出的查询结果",
     ready: "导出完成",
   },

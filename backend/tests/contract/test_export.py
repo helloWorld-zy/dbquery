@@ -52,3 +52,7 @@ def test_export_contract() -> None:
     export_response = client.post("/api/v1/exports", json={"queryId": query_id, "format": "csv"})
     assert export_response.status_code == 200
     assert export_response.json()["exportId"]
+
+    export_response = client.post("/api/v1/exports", json={"queryId": query_id, "format": "json"})
+    assert export_response.status_code == 200
+    assert export_response.json()["exportId"]

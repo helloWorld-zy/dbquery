@@ -7,7 +7,7 @@ from .base import AppBaseModel
 
 class ExportRequest(AppBaseModel):
     query_id: str
-    format: Literal["csv"]
+    format: Literal["csv", "json"]
 
 
 class ExportResponse(AppBaseModel):

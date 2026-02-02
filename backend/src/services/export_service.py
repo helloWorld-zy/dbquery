@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import csv
+import json
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
@@ -38,6 +39,21 @@ class ExportService:
             writer = csv.writer(file)
             writer.writerow([col["name"] for col in result.columns])
             writer.writerows(result.rows)
+
+        self._exports[export_id] = file_path
+        return export_id, file_path
+
+    def export_json(self, query_id: str) -> tuple[str, Path]:
+        result = self._results.get(query_id)
+        if result is None:
+            raise AppError(code="EXPORT_NOT_FOUND", message="Query result not found.", status_code=404)
+
+        export_id = str(uuid4())
+        file_path = self._export_dir / f"export_{export_id}.json"
+        columns = [col["name"] for col in result.columns]
+        rows = [dict(zip(columns, row)) for row in result.rows]
+        with file_path.open("w", encoding="utf-8") as file:
+            json.dump(rows, file)
 
         self._exports[export_id] = file_path
         return export_id, file_path
